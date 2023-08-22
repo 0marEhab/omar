@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <!-- font google main -->
@@ -30,47 +30,57 @@
           <ul class="navbar-nav">
             <div class="p">
                 <li class="nav-item active">
-                    <a class="nav-link" href="../products/index.php">Products</a>
+                    <a class="nav-link" href="./index.php">Products</a>
                 </li>
             </div>
             <div class="p">
                 <li class="nav-item">
-                    <a class="nav-link" href="/client/register.php">Register</a>
+                    <a class="nav-link" href="../client/register.php">Register</a>
                 </li>
             </div>
             <div class="l">
                 <li class="nav-item">
-                   <a class="nav-link" href="/client/login.php">Login</a>
+                   <a class="nav-link" href="login.html">Login</a>
                 </li>
              </div>
          </ul>   
         </div>
     </nav>
     <div class="f">
-        <form action="login.php" method="post">
-            <header> Login</header>
+        <form action="index.php" method="post">
+            <header>create products</header>
             <div class="in">
-                <label for="e">
-                    <input type="email" name="email" id="e" placeholder="email" required>
+                <label for="n">
+                    <input type="text" name="name" id="n" placeholder="name" required>
                 </label>
             </div>
             <div class="in">
                 <label for="p">
-                    <input type="password" name="password" id="p" placeholder="password" required>
+                    <input type="number" name="size" id="p" placeholder="size" required>
                 </label>
             </div>
-            <div class="b">
-                <input type="submit" value="confrim" class="s">
+            <div class="in">
+                <label for="f"> 
+                    <input type="text" name="color" id="f" placeholder="color" required>
+                </label>
             </div>
+            <div class="in">
+                <label for="c"> 
+                    <input type="number" name="count_in_stock" id="c" placeholder="count_in_stock" required>
+                </label>
+            </div>
+            <div class="for">
+                <a href="#">All products</a>
+            </div>
+            <hr>
+            <div class="b">
+                <input type="submit" value="create" class="s">
+            </div>
+            
         </form>
     </div>
 
-    
-
-
-
-<style>
-    *{
+    <style>*{
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -127,7 +137,7 @@ body{
 .p .nav-link:hover::before{
     content: "";
     position: absolute;
-    width: 100px;
+    width: 120px;
     height: 2px;
     background:#c4c4c4;
     left: 9px;
@@ -136,7 +146,7 @@ body{
 .l .nav-link::before{
     content: "";
     position: absolute;
-    width: 75px;
+    width: 70px;
     height: 2px;
     background: transparent;
     left: 9px;
@@ -146,7 +156,7 @@ body{
 .l .nav-link:hover::before{
     content: "";
     position: absolute;
-    width: 65px;
+    width: 80px;
     height: 2px;
     background:#c4c4c4;
     left: 9px;
@@ -159,7 +169,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center !important;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 50px);
 }
 @media (max-width:767px){
     .f{
@@ -173,7 +183,7 @@ body{
 }
 form{
     width: 500px;
-    height: 280px;
+    height: 480px;
     border: solid 1px var(--section_one-color);
     border-radius: 25px;
     box-shadow: 0 0 0 2px rgba(160, 164, 164, 0.333) ;
@@ -201,6 +211,12 @@ form header{
     font-size: 40px;
     font-family: 'Lobster', cursive;
 }
+@media (max-width:300px){
+    form header{
+        font-size:28px
+    }
+}
+
 .in{
     display: flex;
     padding: 15px 15px 5px ;
@@ -240,6 +256,22 @@ form header{
     color: rgb(20, 90, 82);
     font-size: 20px;
 }
+.for{
+    text-align: center;
+    font-size: 20px; 
+    margin: 6px 0;
+}
+.for a{
+    text-decoration: none;
+    color: rgb(20, 90, 82);
+}
+.for a:hover{
+    cursor:wait;
+    color: var(--background-color);
+}
+hr {
+    opacity: 10%;
+}
 .b{
     display: flex;
     justify-content: center;
@@ -256,8 +288,11 @@ form header{
     background-color: var(--background-color);
     color: white;
     font-size: 20px;
-}
-</style>
+}</style>
+
+
+
+
 
 
 
@@ -272,27 +307,28 @@ form header{
 </html>
 
 
+
+
 <?php
 
 
-if(isset($_POST['email'])){
+if(isset($_POST["name"])){
+$connection = mysqli_connect("127.0.0.1", "root", "", "ecommerce");
+$name = $_POST['name'];
+$size = $_POST['size'];
+$color = $_POST['color'];
+$count_in_stock = $_POST['count_in_stock'];
 
-    $email = $_POST['email'];
-
-    $password = $_POST['password'];
 
 
-    $connection = mysqli_connect("127.0.0.1", "root", "", "ecommerce");
+$query = "INSERT INTO `product_create`
+(`name`,`size`,`color`,`count_in_stock`)
+VALUES
+('$name','$size','$color','$count_in_stock');
+";
 
-$mysql = "SELECT * FROM register WHERE email='$email' AND password='$password' ";
-
-$result = mysqli_query($connection,$mysql);
-
-if(mysqli_num_rows($result)>0){
-    header("location: ../products/index.php");
-}
-else{
-    echo "check your email or password please";
-}
+$result = mysqli_query($connection,$query);
 
 }
+
+

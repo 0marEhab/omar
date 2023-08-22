@@ -16,9 +16,10 @@
     <script
     src="https://kit.fontawesome.com/306f44334f.js"crossorigin="anonymous"></script>
     <!-- normalize css -->
-    <link rel="stylesheet" href="../normalize.css">
+    <link rel="stylesheet" href="normalize.css">
     <!-- bootstrap & file css -->
     <link rel="stylesheet" href="../bootstrap-4.0.0-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../details.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-light navbar-light sticky-top">
@@ -30,34 +31,41 @@
           <ul class="navbar-nav">
             <div class="p">
                 <li class="nav-item active">
-                    <a class="nav-link" href="../products/index.php">Products</a>
+                    <a class="nav-link" href="index.html">Products</a>
                 </li>
             </div>
             <div class="p">
                 <li class="nav-item">
-                    <a class="nav-link" href="/client/register.php">Register</a>
+                    <a class="nav-link" href="register.html">Register</a>
                 </li>
             </div>
             <div class="l">
                 <li class="nav-item">
-                   <a class="nav-link" href="/client/login.php">Login</a>
+                   <a class="nav-link" href="login.html">Login</a>
                 </li>
              </div>
          </ul>   
         </div>
     </nav>
     <div class="f">
-        <form action="login.php" method="post">
-            <header> Login</header>
+        <?php
+        $id= $_GET["id"];
+        ?>
+        <form action="create.php?id=<?=$id;?>" method="post">
+            <header>Add to cart</header>
             <div class="in">
-                <label for="e">
-                    <input type="email" name="email" id="e" placeholder="email" required>
+                <label for="n">
+                    <input type="text" name="client_id" id="n" placeholder="client_id" required>
                 </label>
             </div>
+            
             <div class="in">
-                <label for="p">
-                    <input type="password" name="password" id="p" placeholder="password" required>
+                <label for="e">
+                    <input type="number" name="count" id="e" placeholder="count" required>
                 </label>
+            </div>
+            <div class="for">
+                <a href="./index.php">product order</a>
             </div>
             <div class="b">
                 <input type="submit" value="confrim" class="s">
@@ -66,6 +74,9 @@
     </div>
 
     
+
+
+
 
 
 
@@ -159,7 +170,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center !important;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 150px);
 }
 @media (max-width:767px){
     .f{
@@ -173,7 +184,7 @@ body{
 }
 form{
     width: 500px;
-    height: 280px;
+    height: 350px;
     border: solid 1px var(--section_one-color);
     border-radius: 25px;
     box-shadow: 0 0 0 2px rgba(160, 164, 164, 0.333) ;
@@ -201,6 +212,12 @@ form header{
     font-size: 40px;
     font-family: 'Lobster', cursive;
 }
+@media (max-width:300px){
+    form header{
+        font-size:28px
+    }
+}
+
 .in{
     display: flex;
     padding: 15px 15px 5px ;
@@ -257,42 +274,47 @@ form header{
     color: white;
     font-size: 20px;
 }
+.for{
+    text-align: center;
+    font-size: 20px; 
+    margin: 6px 0;
+}
+.for a{
+    text-decoration: none;
+    color: rgb(20, 90, 82);
+}
+.for a:hover{
+    cursor:wait;
+    color: var(--background-color);
+}
 </style>
 
 
 
-
-
-
     <!-- script sources -->
-    <script src="../bootstrap-4.0.0-dist/js/bootstrap.js"></script>
-    <script src="../bootstrap-4.0.0-dist/js/cdnjs.cloudflare.com_ajax_libs_popper.js_1.11.0_umd_popper.min.js"></script>
-    <script src="../bootstrap-4.0.0-dist/js/code.jquery.com_jquery-3.7.0.min.js"></script>
+    <script src="bootstrap-4.0.0-dist/js/cdnjs.cloudflare.com_ajax_libs_popper.js_1.11.0_umd_popper.min.js"></script>
+    <script src="bootstrap-4.0.0-dist/js/code.jquery.com_jquery-3.7.0.min.js"></script>
+    <script src="bootstrap-4.0.0-dist/js/bootstrap.js"></script>
 </body>
 </html>
 
-
 <?php
 
-
-if(isset($_POST['email'])){
-
-    $email = $_POST['email'];
-
-    $password = $_POST['password'];
-
-
+if(isset($_POST["client_id"])){
     $connection = mysqli_connect("127.0.0.1", "root", "", "ecommerce");
+    $name_id= $_POST['client_id'];
+    $product_id = $_GET['id'];
+    $count = $_POST['count'];
 
-$mysql = "SELECT * FROM register WHERE email='$email' AND password='$password' ";
 
-$result = mysqli_query($connection,$mysql);
+    $query = "INSERT INTO `order_create`
+    (`name_id`,`product_id`,`count`)
+    VALUES
+    ('$name_id','$product_id','$count');
+    ";
 
-if(mysqli_num_rows($result)>0){
-    header("location: ../products/index.php");
-}
-else{
-    echo "check your email or password please";
-}
+$result = mysqli_query($connection,$query);
 
+header("location: index.php");
+die;
 }
